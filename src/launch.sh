@@ -3,7 +3,7 @@
 # 说明：桌面环境 PATH 有限，优先用项目内 electron，找不到则回退 nvm 的 node 全局 electron
 set -euo pipefail
 
-cd "$HOME/5_个人/binance"
+# cd "$HOME/5_个人/binance"
 
 ELECTRON_BIN=""
 if [ -x "./node_modules/.bin/electron" ]; then
