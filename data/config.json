@@ -1,0 +1,21 @@
+{
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "BNBUSDT",
+    "PUMPUSDT",
+    "BTWUSDT",
+    "JCTUSDT",
+    "RONINUSDT",
+    "STRKUSDT",
+    "ENAUSDT",
+    "TAOUSDT",
+    "WLDUSDT",
+    "QUSDT",
+    "TRUTHUSDT"
+  ],
+  "dotColors": {
+    "GUSDT": "#FF8A34"
+  },
+  "savedAt": 1792036337452
+}

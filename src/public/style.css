@@ -1,0 +1,311 @@
+/* 聪明钱仓位总览 - 多合约网格视图（深色主题） */
+:root {
+  --bg: #0b0e11;
+  --card: #181a20;
+  --border: #2b3139;
+  --text: #eaecef;
+  --text-muted: #848e9c;
+  --green: #0ecb81;
+  --red: #f6465d;
+  --accent: #f0b90b;
+  --dot-size: 12px; /* 合约名前色块大小 */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  font-size: 13px;
+  overflow-x: hidden;
+}
+
+.hidden { display: none !important; }
+.muted { color: var(--text-muted); }
+.up { color: var(--green); }
+.down { color: var(--red); }
+
+/* Electron 自定义标题栏（无边框窗口可拖拽区） */
+.titlebar {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  padding-left: 12px;
+  background: #0f1318;
+  border-bottom: 1px solid var(--border);
+  -webkit-app-region: drag;
+  user-select: none;
+}
+.titlebar-title { font-size: 12px; color: var(--text-muted); }
+.titlebar-controls { display: flex; margin-left: auto; height: 100%; -webkit-app-region: no-drag; }
+.tb-btn {
+  width: 44px;
+  height: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+.tb-btn:hover { background: #2b3139; color: var(--text); }
+.tb-btn.close:hover { background: var(--red); color: #fff; }
+
+/* 顶部工具条 */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background: #12161c;
+  border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.logo { color: var(--accent); font-size: 16px; }
+.title { font-weight: 600; font-size: 14px; }
+
+/* 页签导航 */
+.tabs { display: flex; gap: 4px; }
+.tab {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+.tab:hover { color: var(--text); }
+.tab.active { background: #2b3139; color: var(--text); border-color: var(--accent); }
+
+.picker { position: relative; flex: 1; max-width: 340px; }
+#add-input {
+  width: 100%;
+  padding: 7px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+}
+#add-input:focus { border-color: var(--accent); }
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 280px;
+  overflow-y: auto;
+  background: #1e2329;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  z-index: 30;
+}
+.dd-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.dd-item:hover, .dd-item.active { background: #2b3139; }
+.dd-item.exists { opacity: 0.55; }
+
+.controls { display: flex; align-items: center; gap: 12px; margin-left: auto; white-space: nowrap; }
+.auto-refresh { display: flex; align-items: center; gap: 5px; color: var(--text-muted); cursor: pointer; }
+.update-time { font-size: 12px; }
+.btn {
+  padding: 7px 18px;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: #1e2026;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn:hover { filter: brightness(1.08); }
+
+/* 主区域 */
+main { padding: 12px 16px 20px; }
+
+/* 极端多空比扫描页 */
+.scan-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.scan-controls label { display: flex; align-items: center; gap: 6px; color: var(--text-muted); }
+.scan-controls input {
+  width: 90px;
+  padding: 5px 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+}
+.scan-controls input:focus { border-color: var(--accent); }
+.scan-progress { font-size: 12px; }
+
+.scan-summary { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.scan-group { margin-bottom: 18px; }
+.scan-group-title { font-weight: 600; font-size: 13px; margin-bottom: 8px; }
+.scan-group-title.long { color: var(--red); }
+.scan-group-title.short { color: var(--green); }
+.scan-empty { color: var(--text-muted); font-size: 12px; padding: 8px 0; }
+.scan-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.scan-table th, .scan-table td {
+  padding: 6px 10px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.scan-table th { color: var(--text-muted); font-weight: 500; font-size: 11px; }
+.scan-table th:first-child, .scan-table td:first-child { text-align: left; }
+.long-pct { color: var(--red); font-weight: 600; }
+.short-pct { color: var(--green); font-weight: 600; }
+.scan-add {
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--accent);
+  font-size: 11px;
+  cursor: pointer;
+}
+.scan-add:hover { border-color: var(--accent); }
+.scan-add:disabled { color: var(--text-muted); border-color: var(--border); cursor: default; }
+
+/* 加载/提示状态 */
+.status-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 60px 0;
+  color: var(--text-muted);
+}
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 合约卡片网格 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.card-head { display: flex; align-items: baseline; gap: 8px; }
+.sym { font-weight: 700; font-size: 14px; }
+/* 合约名前高亮色块：颜色默认按合约名分配，点击弹出色板自定义；大小由 --dot-size 控制 */
+.sym .dot {
+  display: inline-block;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  margin-right: 6px;
+  border-radius: calc(var(--dot-size) / 4);
+  background: var(--dot, var(--accent));
+  vertical-align: -0.08em;
+  cursor: pointer;
+}
+.price { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.chg { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.volume { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.remove {
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+.remove:hover { background: #2b3139; color: var(--red); }
+
+.card-error { color: var(--red); font-size: 12px; padding: 6px 0; }
+
+/* 色块颜色选择板（点击合约名前色块弹出） */
+.dot-picker {
+  position: fixed;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: repeat(6, 26px);
+  gap: 6px;
+  padding: 10px;
+  background: #1e2329;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.swatch {
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.swatch:hover { transform: scale(1.15); }
+.swatch.active { border: 2px solid #fff; }
+.swatch-clear {
+  grid-column: 1 / -1;
+  padding: 4px 0;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 5px;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+}
+.swatch-clear:hover { color: var(--text); border-color: var(--text-muted); }
+
+/* 卡片数据行 */
+.row { display: flex; align-items: center; gap: 8px; }
+.tag { width: 44px; flex-shrink: 0; color: var(--text-muted); font-size: 12px; }
+
+/* 多空仓位占比条（多头红、空头绿） */
+.track {
+  flex: 1;
+  height: 8px;
+  background: var(--green);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.track-long { height: 100%; background: var(--red); border-radius: 4px 0 0 4px; }
+.track-label { width: 52px; flex-shrink: 0; font-size: 11px; color: var(--text-muted); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* 多/空仓位与盈亏行（多头红、空头绿）；pos 两行式：上行仓位值、下行小字开仓均价 */
+.row .pos { display: inline-flex; flex-direction: column; align-items: flex-start; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.3; }
+.row .pos.long { color: var(--red); }
+.row .pos.short { color: var(--green); margin-left: 14px; }
+.row .pos .entry { font-size: 11px; font-weight: 400; color: var(--text-muted); }
+.row .pnl { margin-left: auto; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }

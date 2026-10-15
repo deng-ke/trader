@@ -1,0 +1,24 @@
+{
+  "name": "binance",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "smart-money": "node tools/smart_money.js",
+    "smart-money-overview": "node tools/smart_money_overview.js",
+    "find-extreme-ratio": "node tools/find_extreme_ratio.js",
+    "smart-money-web": "node src/server.js",
+    "smart-money-desktop": "electron src/electron/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "playwright": "^1.63.0"
+  },
+  "devDependencies": {
+    "electron": "^44.7.0"
+  }
+}

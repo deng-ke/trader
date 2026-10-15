@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>聪明钱仓位总览</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Electron 自定义标题栏（仅桌面应用模式显示） -->
+  <div id="titlebar" class="titlebar hidden">
+    <span class="titlebar-title">聪明钱仓位总览</span>
+    <div class="titlebar-controls">
+      <button id="min-btn" class="tb-btn" title="最小化">&#8211;</button>
+      <button id="close-btn" class="tb-btn close" title="关闭（驻留托盘）">&#10005;</button>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◆</span>
+      <span class="title">聪明钱仓位总览</span>
+    </div>
+    <nav class="tabs">
+      <button id="tab-overview" class="tab active">仓位总览</button>
+      <button id="tab-scan" class="tab">极端扫描</button>
+    </nav>
+    <div class="picker">
+      <input id="add-input" type="text" placeholder="添加合约，如 METUSDT" autocomplete="off" spellcheck="false">
+      <div id="add-dropdown" class="dropdown hidden"></div>
+    </div>
+    <div class="controls">
+      <label class="auto-refresh" title="每 30 秒自动刷新">
+        <input id="auto-refresh" type="checkbox" checked> 自动刷新
+      </label>
+      <span id="update-time" class="update-time muted"></span>
+      <button id="refresh-btn" class="btn">刷新</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="overview-view" class="view">
+      <div id="status-box" class="status-box">
+        <div id="spinner" class="spinner"></div>
+        <div id="status-text">正在加载 10 个合约数据…</div>
+      </div>
+      <section id="grid" class="grid"></section>
+    </div>
+
+    <section id="scan-view" class="view hidden">
+      <div class="scan-controls">
+        <label>偏多阈值 ≥ <input id="scan-high" type="number" min="51" max="100" value="60"> %</label>
+        <label>偏空阈值 ≤ <input id="scan-low" type="number" min="0" max="49" value="40"> %</label>
+        <label>综合仓位 &gt; <input id="scan-min" type="number" min="0" step="100000" value="5000000"> USDT</label>
+        <button id="scan-btn" class="btn">开始扫描</button>
+        <span id="scan-progress" class="scan-progress muted"></span>
+      </div>
+      <div id="scan-results" class="scan-results"></div>
+    </section>
+  </main>
+
+  <!-- 色块颜色选择板（点击卡片合约名前色块弹出） -->
+  <div id="dot-picker" class="dot-picker hidden"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

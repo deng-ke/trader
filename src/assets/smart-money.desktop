@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=聪明钱仓位总览
+Name[en]=Smart Money Overview
+Comment=币安合约聪明钱仓位总览（交易员/巨鲸仓位、平均开仓价、未实现盈亏）
+Exec=/home/dk/5_个人/binance/src/launch.sh
+Icon=/home/dk/5_个人/binance/src/assets/icon.png
+Terminal=false
+Categories=Finance;Network;
+StartupWMClass=smart-money
+StartupNotify=true
